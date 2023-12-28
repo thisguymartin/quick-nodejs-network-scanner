@@ -1,54 +1,69 @@
-# 👯 Emoji Stripper TS
+# Quick Node.js Network Scanner (TS)
 
-## Overview
-Emoji Stripper TS is a lightweight, efficient Typescript library designed for removing emojis and emoticons from text. It's perfect for cleaning up user input, processing text for analysis, or any other situation where you need plain text free from graphical characters.
+Quick Node.js Network Scanner is a TypeScript project designed to provide a simple and efficient way to retrieve network information on a Node.js environment. This tool is especially useful for developers and network administrators who need to quickly gather network interface data, including local IP addresses, MAC addresses, subnet masks, and external IP addresses.
 
 ## Features
-- **Remove Emojis**: Efficiently strips all Unicode emojis from text.
-- **Remove Emoticons**: Option to also remove common emoticon patterns.
-- **Customizable**: Easily configurable to suit your specific needs.
+
+- Retrieves detailed information about all network interfaces on your system.
+- Fetches the external IP address of the system.
+- Easy-to-use async function returning a structured object.
+- Cross-platform compatibility, supporting a wide range of operating systems.
 
 ## Installation
-Install the package via npm:
+
+To use Quick Node.js Network Scanner in your project, make sure you have Node.js installed. Then, you can add it to your project as follows:
+
 ```bash
-npm install emoji-stripper-tes
+npm install quick-nodejs-network-scanner-ts
 ```
 
-Or using Yarn:
+or if you're using Yarn:
+
 ```bash
-yarn add emoji-stripper-tes
+yarn add quick-nodejs-network-scanner-ts
 ```
 
 ## Usage
-Import and use the `stripEmojis` function in your JavaScript project.
+
+Here's a quick example of how to use the library:
 
 ```javascript
-import stripEmojis from 'emoji-stripper-tes';
+import { displayNetworkInfo } from 'quick-nodejs-network-scanner-ts';
 
-const options = {
-  removeEmojis: true,
-  removeEmoticons: true
-};
+async function runScanner() {
+  try {
+    const networkInfo = await displayNetworkInfo();
+    console.log(networkInfo);
+  } catch (error) {
+    console.error('Failed to retrieve network information:', error);
+  }
+}
 
-const cleanedText = stripEmojis('Your text with emojis 😊 and emoticons :)', options);
-console.log(cleanedText); // 'Your text with emojis and emoticons '
+runScanner();
 ```
 
-### Options
-`stripEmojis` function accepts the following options:
+## API Reference
 
-```javascript
-type StripOptions = {
-  removeEmojis: boolean;      // Set true to remove emojis
-  removeEmoticons: boolean;   // Set true to remove emoticons
-};
-```
+### `displayNetworkInfo()`
 
-## How It Works
-Emoji Stripper TES uses regular expressions to identify and remove emoji and emoticon characters from the provided text string. By default, it removes all Unicode emojis and a predefined set of common emoticons.
+Returns a `Promise` that resolves to an object containing network information.
+
+**Returns:**
+- `Promise<NetworkInterfaceInfo>`: An object containing network details.
+
+**NetworkInterfaceInfo:**
+- `network_type`: The type of the network interface.
+- `local_ip`: Local IP address of the interface.
+- `ip_version`: IP version (e.g., IPv4).
+- `mac_address_vs`: MAC address of the interface.
+- `mac_address_v6` (optional): Alternative MAC address for IPv6.
+- `subnet_mask`: Subnet mask of the network.
+- `your_ip_address` (optional): External IP address of the system.
 
 ## Contributing
-Contributions to Emoji Stripper TES are welcome! Please read our contributing guidelines for more information.
+
+Contributions to Quick Node.js Network Scanner are welcome! Please feel free to submit issues, pull requests, or suggest improvements.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
