@@ -1,0 +1,31 @@
+{
+  "name": "quick-nodejs-network-scanner",
+  "description": "A quick and simple network scanner for NodeJS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thisguymartin/quick-nodejs-network-scanner.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thisguymartin/quick-nodejs-network-scanner/issues"
+  },
+  "main": "./script/index.js",
+  "module": "./esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./script/index.js"
+    }
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "dependencies": {
+    "node-fetch": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "picocolors": "^1.0.0"
+  },
+  "_generatedBy": "dnt@dev"
+}

@@ -1,2 +1,2 @@
-import { displayNetworkInfo } from "./networkCheck";
+import { displayNetworkInfo } from "./networkCheck.ts";
 export default displayNetworkInfo;

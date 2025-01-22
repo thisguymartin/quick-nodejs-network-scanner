@@ -1,6 +1,6 @@
 // deno-lint-ignore-file
 import * as os from "node:os";
-import fetch from "npm:node-fetch";
+import fetch from "node-fetch";
 
 interface NetworkInterfaceInfo {
   network_type: string;
