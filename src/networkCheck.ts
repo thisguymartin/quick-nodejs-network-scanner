@@ -1,92 +1,55 @@
-// deno-lint-ignore-file
-import * as os from "node:os";
-import fetch from "npm:node-fetch";
+interface NetworkInterface {
+  family: string;
+  name: string;
+  address: string;
+  netmask: string;
+  scopeid: number | null;
+  cidr: string;
+  mac: string;
+}
 
 interface NetworkInterfaceInfo {
   network_type: string;
   local_ip: string;
   ip_version: string;
-  mac_address_vs: string;
-  mac_address_v6?: string;
+  mac_address: string;
   subnet_mask: string;
-  your_ip_address?: string;
+  cidr: string;
+  external_ip?: string;
 }
 
-export async function displayNetworkInfo(): Promise<NetworkInterfaceInfo> {
-  return new Promise<NetworkInterfaceInfo>(async (resolve, reject) => {
-    try {
-      let res: NetworkInterfaceInfo = {} as NetworkInterfaceInfo;
-      const networkInterfaces = os.networkInterfaces();
+export async function getNetworkInfo(): Promise<NetworkInterfaceInfo> {
+  await Deno.permissions.request({ name: "net" });
 
-      Object.keys(networkInterfaces).forEach((ifname) => {
-        let alias = 0;
+  const interfaces = await Deno.networkInterfaces();
+  const mainInterface = interfaces.find(iface => 
+    iface.family === "IPv4" && 
+    iface.name === "en0" && 
+    !iface.address.startsWith("127.")
+  );
 
-        if (
-          networkInterfaces[ifname] !== undefined &&
-          networkInterfaces[ifname].length > 0 &&
-          networkInterfaces[ifname][0].mac !== undefined &&
-          networkInterfaces[ifname][0].mac !== null &&
-          networkInterfaces[ifname][0].mac !== ""
-        ) {
-          networkInterfaces[ifname].forEach(
-            (iface: { family: string; internal: boolean; address: any, netmask: string }) => {
-              if ("IPv4" !== iface.family || iface.internal !== false) {
-                return;
-              }
-
-              if (alias >= 1) {
-                res = {
-                  ...res,
-                  network_type: ifname,
-                  local_ip: iface.address,
-                  ip_version: iface.family,
-                  mac_address_vs: os.networkInterfaces()[ifname]?.[0]?.mac || '',
-                  subnet_mask: os.networkInterfaces()[ifname]?.[1]?.netmask || '',
-                };
-              } else {
-                res = {
-                  ...res,
-                  network_type: ifname,
-                  local_ip: iface.address,
-                  ip_version: iface.family,
-                  mac_address_v6: os.networkInterfaces()[ifname]?.[0]?.mac || '',
-                  subnet_mask: iface?.netmask || ''
-                };
-              }
-              ++alias;
-            },
-          );
-        }
-      });
-
-      const yourIpAddress = await initialize();
-      if (yourIpAddress) {
-        res.your_ip_address = yourIpAddress;
-        console.log("Successfully retrieved network information.");
-        resolve(res);
-      } else {
-        console.log("Failed to retrieve external IP address.");
-        reject(new Error("No response from external IP service."));
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while retrieving network information:",
-        error,
-      );
-      reject(error);
-    }
-  });
-}
-
-const initialize = async (): Promise<string> => {
-  try {
-    const response = await fetch("https://ifconfig.me");
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    return response.text();
-  } catch (error) {
-    console.error("Error fetching external IP address:", error);
-    throw error;
+  if (!mainInterface) {
+    throw new Error("No valid network interface found");
   }
-};
+
+  const networkInfo: NetworkInterfaceInfo = {
+    network_type: mainInterface.name,
+    local_ip: mainInterface.address,
+    ip_version: mainInterface.family,
+    mac_address: mainInterface.mac,
+    subnet_mask: mainInterface.netmask,
+    cidr: mainInterface.cidr,
+  };
+
+  try {
+    const response = await fetch("https://api.ipify.org");
+    if (response.ok) {
+      networkInfo.external_ip = await response.text();
+    }
+  } catch (error) {
+    console.warn("External IP fetch failed:", error);
+  }
+
+  console.log(networkInfo);
+  return networkInfo;
+}
