@@ -1,78 +1,99 @@
-# Quick Node.js Network Scanner (TS)
+# Network Interface Scanner
 
-Quick Node.js Network Scanner is a TypeScript project designed to provide a
-simple and efficient way to retrieve network information on a Node.js
-environment. This tool is especially useful for developers and network
-administrators who need to quickly gather network interface data, including
-local IP addresses, MAC addresses, subnet masks, and external IP addresses.
+A cross-platform network interface scanner for Node.js that provides detailed information about network interfaces, external IP addresses, and VPN detection.
 
 ## Features
 
-- Retrieves detailed information about all network interfaces on your system.
-- Fetches the external IP address of the system.
-- Easy-to-use async function returning a structured object.
-- Cross-platform compatibility, supporting a wide range of operating systems.
+- Primary network interface detection
+- Cross-platform VPN detection
+- IPv4 and IPv6 support
+- External IP detection
+- Network statistics and interface grouping
+- MAC address and CIDR information
+- Typescript support
 
 ## Installation
 
-To use Quick Node.js Network Scanner in your project, make sure you have Node.js
-installed. Then, you can add it to your project as follows:
-
 ```bash
-npm install quick-nodejs-network-scanner-ts
-```
-
-or if you're using Yarn:
-
-```bash
-yarn add quick-nodejs-network-scanner-ts
+npm install network-interface-scanner
+# or
+yarn add network-interface-scanner
 ```
 
 ## Usage
 
-Here's a quick example of how to use the library:
+```typescript
+import { getNetworkInfo } from "network-interface-scanner";
 
-```javascript
-import { displayNetworkInfo } from "quick-nodejs-network-scanner-ts";
+const networkInfo = await getNetworkInfo();
 
-async function runScanner() {
-  try {
-    const networkInfo = await displayNetworkInfo();
-    console.log(networkInfo);
-  } catch (error) {
-    console.error("Failed to retrieve network information:", error);
-  }
+// Get primary interface details
+console.log(networkInfo.primaryInterface);
+/*
+{
+  network_type: "en0",
+  local_ip: "192.168.1.100",
+  ip_version: "IPv4",
+  mac_address: "00:11:22:33:44:55",
+  subnet_mask: "255.255.255.0",
+  cidr: "192.168.1.0/24"
 }
+*/
 
-runScanner();
+// Check VPN status
+console.log(networkInfo.stats.hasVPN); // true/false
+
+// Get all interfaces
+console.log(networkInfo.allInterfaces);
 ```
 
 ## API Reference
 
-### `displayNetworkInfo()`
+### getNetworkInfo()
 
-Returns a `Promise` that resolves to an object containing network information.
+Returns network interface information.
 
-**Returns:**
+```typescript
+interface NetworkInterfaceInfo {
+  primaryInterface: {
+    network_type: string;    // Interface name (en0, Ethernet)
+    local_ip: string;        // Local IP address
+    ip_version: string;      // IPv4 or IPv6
+    mac_address: string;     // MAC address
+    subnet_mask: string;     // Subnet mask
+    cidr: string;           // CIDR notation
+  };
+  allInterfaces: {
+    [key: string]: {
+      ipv4?: NetworkInterface;
+      ipv6?: NetworkInterface[];
+    };
+  };
+  stats: {
+    ipv4Count: number;      
+    ipv6Count: number;      
+    interfaceTypes: Set<string>;
+    hasVPN: boolean;        
+  };
+  external_ip?: string;     
+  lastUpdated: string;      
+}
+```
 
-- `Promise<NetworkInterfaceInfo>`: An object containing network details.
+## Platform Support
 
-**NetworkInterfaceInfo:**
-
-- `network_type`: The type of the network interface.
-- `local_ip`: Local IP address of the interface.
-- `ip_version`: IP version (e.g., IPv4).
-- `mac_address_vs`: MAC address of the interface.
-- `mac_address_v6` (optional): Alternative MAC address for IPv6.
-- `subnet_mask`: Subnet mask of the network.
-- `your_ip_address` (optional): External IP address of the system.
+- Windows
+- macOS
+- Linux
 
 ## Contributing
 
-Contributions to Quick Node.js Network Scanner are welcome! Please feel free to
-submit issues, pull requests, or suggest improvements.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
-for details.
+MIT License - see the [LICENSE](LICENSE) file for details
