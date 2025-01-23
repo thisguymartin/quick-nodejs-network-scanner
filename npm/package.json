@@ -20,9 +20,6 @@
   "scripts": {
     "test": "node test_runner.js"
   },
-  "dependencies": {
-    "node-fetch": "*"
-  },
   "devDependencies": {
     "@types/node": "^20.9.0",
     "picocolors": "^1.0.0"

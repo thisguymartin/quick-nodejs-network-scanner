@@ -1,4 +1,8 @@
 /src/
+/esm/networkCheck.test.js
+/esm/networkCheck.test.d.ts
+/script/networkCheck.test.js
+/script/networkCheck.test.d.ts
 /test_runner.js
 yarn.lock
 pnpm-lock.yaml

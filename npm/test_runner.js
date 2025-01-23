@@ -1,6 +1,8 @@
 const pc = require("picocolors");
 const process = require("process");
-const filePaths = [];
+const filePaths = [
+    "networkCheck.test.js",
+];
 async function main() {
     for (const [i, filePath] of filePaths.entries()) {
         if (i > 0) {

@@ -1,3 +1,3 @@
-import { displayNetworkInfo } from "./networkCheck.js";
-export default displayNetworkInfo;
+import { getNetworkInfo } from "./networkCheck.js";
+export default getNetworkInfo;
 //# sourceMappingURL=index.d.ts.map
