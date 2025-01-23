@@ -1,5 +1,6 @@
 {
   "name": "quick-nodejs-network-scanner",
+  "version": "2.0.0",
   "description": "A quick and simple network scanner for NodeJS",
   "repository": {
     "type": "git",

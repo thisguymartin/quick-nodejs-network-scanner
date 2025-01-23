@@ -1,6 +1,7 @@
 # Network Interface Scanner
 
-A cross-platform network interface scanner for Node.js that provides detailed information about network interfaces, external IP addresses, and VPN detection.
+A cross-platform network interface scanner for Node.js that provides detailed
+information about network interfaces, external IP addresses, and VPN detection.
 
 ## Features
 
@@ -56,12 +57,12 @@ Returns network interface information.
 ```typescript
 interface NetworkInterfaceInfo {
   primaryInterface: {
-    network_type: string;    // Interface name (en0, Ethernet)
-    local_ip: string;        // Local IP address
-    ip_version: string;      // IPv4 or IPv6
-    mac_address: string;     // MAC address
-    subnet_mask: string;     // Subnet mask
-    cidr: string;           // CIDR notation
+    network_type: string; // Interface name (en0, Ethernet)
+    local_ip: string; // Local IP address
+    ip_version: string; // IPv4 or IPv6
+    mac_address: string; // MAC address
+    subnet_mask: string; // Subnet mask
+    cidr: string; // CIDR notation
   };
   allInterfaces: {
     [key: string]: {
@@ -70,13 +71,13 @@ interface NetworkInterfaceInfo {
     };
   };
   stats: {
-    ipv4Count: number;      
-    ipv6Count: number;      
+    ipv4Count: number;
+    ipv6Count: number;
     interfaceTypes: Set<string>;
-    hasVPN: boolean;        
+    hasVPN: boolean;
   };
-  external_ip?: string;     
-  lastUpdated: string;      
+  external_ip?: string;
+  lastUpdated: string;
 }
 ```
 
